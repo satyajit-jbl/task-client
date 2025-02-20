@@ -26,7 +26,7 @@ const Navbar = () => {
           <div className=" flex flex-shrink-0 items-center">
             <img src={logo} alt="" />
             <Link to="/" className="text-xl font-bold text-blue-600">
-            CritiqueMaster
+            TaskTrek
             </Link>
           </div>
 
