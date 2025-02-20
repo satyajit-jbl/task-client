@@ -91,16 +91,16 @@ const SocialLogin = () => {
             <div className="px-8">
                 <div className="divider"></div>
                 <div className=" flex justify-around gap-4 mb-4">
-                    <button onClick={handleGoogleSignIn} className="btn w-1/2">
+                    <button onClick={handleGoogleSignIn} className="btn w-full">
 
 
                         <FaGoogle className="mr-4"></FaGoogle> Google
                     </button>
-                    <button onClick={handleGithubSignIn} className="btn w-1/2">
+                    {/* <button onClick={handleGithubSignIn} className="btn w-1/2">
 
 
                         <FaGithub className="mr-4"></FaGithub> Github
-                    </button>
+                    </button> */}
                 </div>
             </div>
         </div>

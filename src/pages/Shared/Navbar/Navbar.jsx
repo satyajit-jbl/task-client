@@ -64,10 +64,10 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <Link to="/login" className="text-gray-600 hover:text-blue-600">
+                <Link to="/login" className="text-gray-600 font-semibold hover:text-blue-600">
                   Login
                 </Link>
-                <Link to="/signup" className="text-gray-600 hover:text-blue-600">
+                <Link to="/signup" className="text-gray-600 font-semibold hover:text-blue-600">
                   Register
                 </Link>
               </>
@@ -112,12 +112,15 @@ const Navbar = () => {
               <Link to="/" className="block text-gray-600 hover:text-blue-600">
                 Home
               </Link>
-              <Link to="/services" className="block text-gray-600 hover:text-blue-600">
-                Services
+              <Link to="/about" className="block text-gray-600 font-semibold hover:text-blue-600">
+                About
+              </Link>
+              <Link to="/contact" className="block text-gray-600 font-semibold hover:text-blue-600">
+                Contact
               </Link>
               {user ? (
                 <>
-                  <Link
+                  {/* <Link
                     to="/add-service"
                     className="block text-gray-600 hover:text-blue-600">
                     Add Service
@@ -131,7 +134,7 @@ const Navbar = () => {
                     to="/my-services"
                     className="block text-gray-600 hover:text-blue-600">
                     My Services
-                  </Link>
+                  </Link> */}
                   <div className="flex items-center space-x-4 py-2">
                     <img
                       src={user.photoURL || "https://via.placeholder.com/40"}
@@ -141,19 +144,19 @@ const Navbar = () => {
                     <button
                       // onClick={onLogout}
                       onClick={handleLogout}
-                      className="text-gray-600 hover:text-blue-600">
+                      className="text-gray-600 font-semibold hover:text-blue-600">
                       Logout
                     </button>
                   </div>
                 </>
               ) : (
                 <>
-                  <Link to="/login" className="block text-gray-600 hover:text-blue-600">
+                  <Link to="/login" className="block text-gray-600 font-semibold hover:text-blue-600">
                     Login
                   </Link>
                   <Link
                     to="/signup"
-                    className="block text-gray-600 hover:text-blue-600">
+                    className="block text-gray-600 font-semibold hover:text-blue-600">
                     Register
                   </Link>
                 </>

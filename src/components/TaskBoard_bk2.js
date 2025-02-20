@@ -11,7 +11,7 @@ const TaskBoard = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/tasks")
+      .get("https://scic-jobtask-satyajit-server.vercel.app/tasks")
       .then((res) => setTasks(res.data))
       .catch((err) => console.error("Error fetching tasks:", err));
   }, []);
@@ -30,7 +30,7 @@ const TaskBoard = () => {
     setTasks(updatedTasks);
 
     try {
-      await axios.put(`http://localhost:5000/tasks/${taskId}`, {
+      await axios.put(`https://scic-jobtask-satyajit-server.vercel.app/tasks/${taskId}`, {
         category: newCategory,
       });
     } catch (error) {
@@ -40,7 +40,7 @@ const TaskBoard = () => {
 
   const addTask = async (newTask) => {
     try {
-      const res = await axios.post("http://localhost:5000/tasks", newTask);
+      const res = await axios.post("https://scic-jobtask-satyajit-server.vercel.app/tasks", newTask);
       setTasks([...tasks, res.data]);
     } catch (error) {
       console.error("Error adding task:", error);
@@ -49,7 +49,7 @@ const TaskBoard = () => {
 
   const handleDelete = async (taskId) => {
     setTasks(tasks.filter((task) => task._id !== taskId));
-    await axios.delete(`http://localhost:5000/tasks/${taskId}`);
+    await axios.delete(`https://scic-jobtask-satyajit-server.vercel.app/tasks/${taskId}`);
   };
 
   const handleEdit = (task) => {
@@ -73,7 +73,7 @@ const TaskBoard = () => {
     setEditingTask(null);
 
     try {
-      await axios.put(`http://localhost:5000/tasks/${editingTask}`, {
+      await axios.put(`https://scic-jobtask-satyajit-server.vercel.app/tasks/${editingTask}`, {
         title: editValues.title,
         description: editValues.description,
       });

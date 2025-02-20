@@ -15,7 +15,7 @@ const TaskBoard = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/tasks")
+      .get("https://scic-jobtask-satyajit-server.vercel.app/tasks")
       .then((res) => setTasks(res.data))
       .catch((err) => console.error("Error fetching tasks:", err));
   }, []);
@@ -31,7 +31,7 @@ const TaskBoard = () => {
     setTasks(tasks.map(task => task._id === taskId ? { ...task, category: newCategory } : task));
 
     try {
-      await axios.put(`http://localhost:5000/tasks/${taskId}`, { category: newCategory });
+      await axios.put(`https://scic-jobtask-satyajit-server.vercel.app/tasks/${taskId}`, { category: newCategory });
     } catch (error) {
       console.error("Error updating task category:", error);
     }
@@ -39,7 +39,7 @@ const TaskBoard = () => {
 
   const handleDelete = async (taskId) => {
     setTasks(tasks.filter(task => task._id !== taskId));
-    await axios.delete(`http://localhost:5000/tasks/${taskId}`);
+    await axios.delete(`https://scic-jobtask-satyajit-server.vercel.app/tasks/${taskId}`);
   };
 
   return (
@@ -48,7 +48,7 @@ const TaskBoard = () => {
       <form className="bg-gray-200 p-4 rounded-lg mb-5 flex flex-wrap gap-3" onSubmit={(e) => {
         e.preventDefault();
         if (!newTask.title.trim()) return alert("Task title is required!");
-        axios.post("http://localhost:5000/tasks", newTask).then((res) => {
+        axios.post("https://scic-jobtask-satyajit-server.vercel.app/tasks", newTask).then((res) => {
           setTasks([...tasks, { ...newTask, _id: res.data.insertedId }]);
           setNewTask({ title: "", description: "", category: "To-Do", time: "" });
         });
@@ -73,7 +73,7 @@ const TaskBoard = () => {
                   <div>
                     <input type="text" name="title" value={editTask.title} onChange={(e) => setEditTask({ ...editTask, [e.target.name]: e.target.value })} className="border rounded p-1 w-full" />
                     <button className="bg-green-500 text-white px-2 py-1 mt-2 w-full" onClick={() => {
-                      axios.put(`http://localhost:5000/tasks/${editTask._id}`, editTask).then(() => {
+                      axios.put(`https://scic-jobtask-satyajit-server.vercel.app/tasks/${editTask._id}`, editTask).then(() => {
                         setTasks(tasks.map(task => task._id === editTask._id ? editTask : task));
                         setEditTask(null);
                       });
