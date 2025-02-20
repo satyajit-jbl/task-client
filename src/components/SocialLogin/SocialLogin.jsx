@@ -31,25 +31,25 @@ const SocialLogin = () => {
     }
 
     const handleGoogleSignIn = () => {
-        googleSignIn();
-        navigate("/");
-            // .then(result => {
-            //     // console.log(result.user);
-            //     const userInfo = {
-            //         email: result.user?.email,
-            //         name: result.user?.displayName,
-            //         photo: result.user?.photoURL,
-            //         role: 'user'
-            //     }
-            //     axiosPublic.post('/users', userInfo)
-            //         .then(res => {
-            //             // console.log(res.data);
-            //             navigate('/');
-            //         })
-            //         .catch(error => {
-            //             console.error('Error during sign-in:', error);
-            //         });
-            // })
+        googleSignIn()
+        // navigate("/");
+            .then(result => {
+                // console.log(result.user);
+                const userInfo = {
+                    email: result.user?.email,
+                    name: result.user?.displayName,
+                    photo: result.user?.photoURL,
+                    role: 'user'
+                }
+                axiosPublic.post('/users', userInfo)
+                    .then(res => {
+                        // console.log(res.data);
+                        navigate('/');
+                    })
+                    .catch(error => {
+                        console.error('Error during sign-in:', error);
+                    });
+            })
     }
     return (
         <div>

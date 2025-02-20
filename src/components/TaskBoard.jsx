@@ -9,7 +9,6 @@ const TaskBoard = () => {
   const [editingTask, setEditingTask] = useState(null);
   const [editValues, setEditValues] = useState({ title: "", description: "" });
 
-  // Fetch tasks from backend
   useEffect(() => {
     axios
       .get("http://localhost:5000/tasks")
@@ -17,12 +16,10 @@ const TaskBoard = () => {
       .catch((err) => console.error("Error fetching tasks:", err));
   }, []);
 
-  // Handle Drag Start
   const handleDragStart = (e, taskId) => {
     e.dataTransfer.setData("taskId", taskId);
   };
 
-  // Handle Drop
   const handleDrop = async (e, newCategory) => {
     e.preventDefault();
     const taskId = e.dataTransfer.getData("taskId");
@@ -41,7 +38,6 @@ const TaskBoard = () => {
     }
   };
 
-  // Add Task (from TaskForm)
   const addTask = async (newTask) => {
     try {
       const res = await axios.post("http://localhost:5000/tasks", newTask);
@@ -51,24 +47,20 @@ const TaskBoard = () => {
     }
   };
 
-  // Delete Task
   const handleDelete = async (taskId) => {
     setTasks(tasks.filter((task) => task._id !== taskId));
     await axios.delete(`http://localhost:5000/tasks/${taskId}`);
   };
 
-  // Enable edit mode
   const handleEdit = (task) => {
     setEditingTask(task._id);
     setEditValues({ title: task.title, description: task.description });
   };
 
-  // Handle edit input change
   const handleEditChange = (e) => {
     setEditValues({ ...editValues, [e.target.name]: e.target.value });
   };
 
-  // Save edited task
   const handleEditSave = async () => {
     if (!editValues.title.trim()) return alert("Task title cannot be empty!");
 
@@ -91,26 +83,26 @@ const TaskBoard = () => {
   };
 
   return (
-    <div className="p-5">
-      {/* TaskForm Component */}
+    <div className="p-4">
+      {/* Task Form */}
       <TaskForm addTask={addTask} />
 
-      {/* Task Board */}
-      <div className="grid grid-cols-3 gap-4 mt-5">
+      {/* Responsive Task Board */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
         {categories.map((category) => (
           <div
             key={category}
-            className="bg-gray-100 p-4 rounded-lg min-h-[300px]"
+            className="bg-gray-100 p-4 rounded-lg min-h-[300px] shadow-md"
             onDragOver={(e) => e.preventDefault()}
             onDrop={(e) => handleDrop(e, category)}
           >
-            <h2 className="text-xl font-bold mb-4">{category}</h2>
+            <h2 className="text-lg font-bold mb-4 text-center">{category}</h2>
             {tasks
               .filter((task) => task.category === category)
               .map((task) => (
                 <div
                   key={task._id}
-                  className="bg-white p-3 rounded shadow mb-2 cursor-pointer"
+                  className="bg-white p-3 rounded shadow mb-2 cursor-pointer transition transform hover:scale-[1.02]"
                   draggable
                   onDragStart={(e) => handleDragStart(e, task._id)}
                   onDoubleClick={() => handleEdit(task)}
