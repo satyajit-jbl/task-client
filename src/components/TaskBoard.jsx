@@ -1,13 +1,17 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import TaskForm from "./TaskForm";
 
 const categories = ["To-Do", "In Progress", "Done"];
 
 const TaskBoard = () => {
   const [tasks, setTasks] = useState([]);
-  const [editingTask, setEditingTask] = useState(null);
-  const [editValues, setEditValues] = useState({ title: "", description: "" });
+  const [newTask, setNewTask] = useState({
+    title: "",
+    description: "",
+    category: "To-Do",
+    time: "",
+  });
+  const [editTask, setEditTask] = useState(null);
 
   useEffect(() => {
     axios
@@ -38,111 +42,142 @@ const TaskBoard = () => {
     }
   };
 
-  const addTask = async (newTask) => {
-    try {
-      const res = await axios.post("http://localhost:5000/tasks", newTask);
-      setTasks([...tasks, res.data]);
-    } catch (error) {
-      console.error("Error adding task:", error);
-    }
-  };
-
   const handleDelete = async (taskId) => {
     setTasks(tasks.filter((task) => task._id !== taskId));
     await axios.delete(`http://localhost:5000/tasks/${taskId}`);
   };
 
-  const handleEdit = (task) => {
-    setEditingTask(task._id);
-    setEditValues({ title: task.title, description: task.description });
+  const handleInputChange = (e) => {
+    setNewTask({ ...newTask, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!newTask.title.trim()) return alert("Task title is required!");
+
+    try {
+      const res = await axios.post("http://localhost:5000/tasks", newTask);
+      setTasks([...tasks, { ...newTask, _id: res.data.insertedId }]);
+      setNewTask({ title: "", description: "", category: "To-Do", time: "" });
+    } catch (error) {
+      console.error("Error adding task:", error);
+    }
   };
 
   const handleEditChange = (e) => {
-    setEditValues({ ...editValues, [e.target.name]: e.target.value });
+    setEditTask({ ...editTask, [e.target.name]: e.target.value });
   };
 
-  const handleEditSave = async () => {
-    if (!editValues.title.trim()) return alert("Task title cannot be empty!");
-
-    const updatedTasks = tasks.map((task) =>
-      task._id === editingTask
-        ? { ...task, title: editValues.title, description: editValues.description }
-        : task
-    );
-    setTasks(updatedTasks);
-    setEditingTask(null);
-
+  const handleEditSubmit = async () => {
+    if (!editTask.title.trim()) return alert("Task title is required!");
     try {
-      await axios.put(`http://localhost:5000/tasks/${editingTask}`, {
-        title: editValues.title,
-        description: editValues.description,
-      });
+      await axios.put(`http://localhost:5000/tasks/${editTask._id}`, editTask);
+      setTasks(
+        tasks.map((task) => (task._id === editTask._id ? editTask : task))
+      );
+      setEditTask(null);
     } catch (error) {
       console.error("Error updating task:", error);
     }
   };
 
   return (
-    <div className="p-4">
+    <div className="p-5">
       {/* Task Form */}
-      <TaskForm addTask={addTask} />
+      <form className="bg-gray-200 p-4 rounded-lg mb-5 flex gap-3" onSubmit={handleSubmit}>
+        <input
+          type="text"
+          name="title"
+          placeholder="Task title"
+          className="p-2 rounded border w-1/4"
+          value={newTask.title}
+          onChange={handleInputChange}
+          maxLength={50}
+          required
+        />
+        <input
+          type="text"
+          name="description"
+          placeholder="Task description (optional)"
+          className="p-2 rounded border w-1/4"
+          value={newTask.description}
+          onChange={handleInputChange}
+          maxLength={200}
+        />
+        <input
+          type="time"
+          name="time"
+          className="p-2 rounded border w-1/6"
+          value={newTask.time}
+          onChange={handleInputChange}
+          required
+        />
+        <select
+          name="category"
+          className="p-2 rounded border"
+          value={newTask.category}
+          onChange={handleInputChange}
+        >
+          {categories.map((cat) => (
+            <option key={cat} value={cat}>{cat}</option>
+          ))}
+        </select>
+        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+          Add Task
+        </button>
+      </form>
 
-      {/* Responsive Task Board */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
+      {/* Task Board */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {categories.map((category) => (
           <div
             key={category}
-            className="bg-gray-100 p-4 rounded-lg min-h-[300px] shadow-md"
+            className="bg-gray-100 p-4 rounded-lg min-h-[300px]"
             onDragOver={(e) => e.preventDefault()}
             onDrop={(e) => handleDrop(e, category)}
           >
-            <h2 className="text-lg font-bold mb-4 text-center">{category}</h2>
-            {tasks
-              .filter((task) => task.category === category)
-              .map((task) => (
-                <div
-                  key={task._id}
-                  className="bg-white p-3 rounded shadow mb-2 cursor-pointer transition transform hover:scale-[1.02]"
-                  draggable
-                  onDragStart={(e) => handleDragStart(e, task._id)}
-                  onDoubleClick={() => handleEdit(task)}
-                >
-                  {editingTask === task._id ? (
-                    <div className="flex flex-col">
-                      <input
-                        type="text"
-                        name="title"
-                        value={editValues.title}
-                        onChange={handleEditChange}
-                        className="p-1 border rounded w-full mb-2"
-                        autoFocus
-                        onBlur={handleEditSave}
-                        onKeyDown={(e) => e.key === "Enter" && handleEditSave()}
-                      />
-                      <input
-                        type="text"
-                        name="description"
-                        value={editValues.description}
-                        onChange={handleEditChange}
-                        className="p-1 border rounded w-full"
-                        onBlur={handleEditSave}
-                        onKeyDown={(e) => e.key === "Enter" && handleEditSave()}
-                      />
-                    </div>
-                  ) : (
-                    <>
-                      <h3 className="font-semibold">{task.title}</h3>
-                      <p className="text-sm">{task.description}</p>
-                      <button
-                        className="text-red-500 text-sm mt-2"
-                        onClick={() => handleDelete(task._id)}
-                      >
-                        Delete
-                      </button>
-                    </>
-                  )}
-                </div>
-              ))}
+            <h2 className="text-xl font-bold mb-4">{category}</h2>
+            {tasks.filter((task) => task.category === category).map((task) => (
+              <div
+                key={task._id}
+                className="bg-white p-3 rounded shadow mb-2 cursor-pointer"
+                draggable
+                onDragStart={(e) => handleDragStart(e, task._id)}
+              >
+                {editTask && editTask._id === task._id ? (
+                  <div>
+                    <input
+                      type="text"
+                      name="title"
+                      value={editTask.title}
+                      onChange={handleEditChange}
+                      className="border rounded p-1 w-full"
+                    />
+                    <button className="bg-green-500 text-white px-2 py-1 mt-2" onClick={handleEditSubmit}>
+                      Save
+                    </button>
+                  </div>
+                ) : (
+                  <div>
+                    <h3 className="font-semibold">{task.title}</h3>
+                    <p className="text-sm">{task.description}</p>
+                    <p className="text-sm font-semibold">Time: {task.time}</p>
+                    <button
+                      className="text-blue-500 text-sm mr-2"
+                      onClick={() => setEditTask(task)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="text-red-500 text-sm"
+                      onClick={() => handleDelete(task._id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         ))}
       </div>

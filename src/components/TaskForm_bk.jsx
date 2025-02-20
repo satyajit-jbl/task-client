@@ -4,17 +4,15 @@ const TaskForm = ({ addTask }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("To-Do");
-  const [time, setTime] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!title.trim() || !time) return;
+    if (!title.trim()) return;
 
-    addTask({ title, description, category, time, order: 0 });
+    addTask({ title, description, category, order: 0 });
 
     setTitle("");
     setDescription("");
-    setTime("");
   };
 
   return (
@@ -30,12 +28,6 @@ const TaskForm = ({ addTask }) => {
         placeholder="Task description"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
-        className="border p-2 w-full mb-2 rounded"
-      />
-      <input
-        type="time"
-        value={time}
-        onChange={(e) => setTime(e.target.value)}
         className="border p-2 w-full mb-2 rounded"
       />
       <select
