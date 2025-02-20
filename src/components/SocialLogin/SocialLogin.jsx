@@ -30,27 +30,62 @@ const SocialLogin = () => {
 
     }
 
+    // const handleGoogleSignIn = () => {
+    //     googleSignIn()
+    //     // navigate("/");
+    //         .then(result => {
+    //             // console.log(result.user);
+    //             const userInfo = {
+    //                 email: result.user?.email,
+    //                 name: result.user?.displayName,
+    //                 photo: result.user?.photoURL,
+    //                 role: 'user'
+    //             }
+    //             axiosPublic.post('/users', userInfo)
+    //                 .then(res => {
+    //                     // console.log(res.data);
+    //                     navigate('/');
+    //                 })
+    //                 .catch(error => {
+    //                     console.error('Error during sign-in:', error);
+    //                 });
+    //         })
+    // }
     const handleGoogleSignIn = () => {
         googleSignIn()
-        // navigate("/");
-            .then(result => {
-                // console.log(result.user);
-                const userInfo = {
-                    email: result.user?.email,
-                    name: result.user?.displayName,
-                    photo: result.user?.photoURL,
-                    role: 'user'
+            .then(async (result) => {
+                if (!result.user) {
+                    console.error("Google Sign-In failed");
+                    return;
                 }
-                axiosPublic.post('/users', userInfo)
-                    .then(res => {
-                        // console.log(res.data);
-                        navigate('/');
-                    })
-                    .catch(error => {
-                        console.error('Error during sign-in:', error);
-                    });
+    
+                const userInfo = {
+                    email: result.user.email,
+                    name: result.user.displayName,
+                    photo: result.user.photoURL,
+                    role: "user",
+                };
+    
+                try {
+                    // Check if user already exists in the database
+                    const existingUser = await axiosPublic.get(`/users/${userInfo.email}`);
+    
+                    if (!existingUser.data.exists) {
+                        // Add new user if they don't exist
+                        await axiosPublic.post("/users", userInfo);
+                    }
+    
+                    // Navigate to home after successful sign-in
+                    navigate("/");
+                } catch (error) {
+                    console.error("Error during sign-in:", error);
+                }
             })
-    }
+            .catch((error) => {
+                console.error("Google Sign-In Error:", error);
+            });
+    };
+    
     return (
         <div>
             <div className="px-8">

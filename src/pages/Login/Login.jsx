@@ -80,8 +80,8 @@ const Login = () => {
                     <div className="text-center md:w-1/2 lg:text-left">
                         {/* <h1 className="text-5xl font-bold text-[#FF921C]">Log In to TailTales Now!</h1>
                         <h1 className="text-2xl font-bold text-[#FF921C]">Unlock Paw-sibilities</h1> */}
-                        <h1 className="text-5xl font-bold text-[#FF921C] drop-shadow-lg animate-bounce">Log In to TailTales Now!</h1>
-                        <h1 className="text-2xl font-bold text-[#FF921C] mt-4 italic tracking-wide animate-pulse">Unlock Paw-sibilities</h1>
+                        <h1 className="text-5xl font-bold text-blue-600 drop-shadow-lg animate-bounce">Log In to TaskTrek Now!</h1>
+                        <h1 className="text-2xl font-bold text-blue-500 mt-4 italic tracking-wide animate-pulse">Visualize and Manage Your Tasks</h1>
 
                         {/* <p className="py-6">
                             Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem
@@ -116,7 +116,7 @@ const Login = () => {
                             <div className="form-control mt-6">
                                 {/* TO DO : APPLY disabled for catcha */}
                                 {/* <input disabled={disabled} className="btn btn-primary" type="submit" value="Login" /> */}
-                                <input disabled={false} className="btn btn-ghost bg-[#FF921C]" type="submit" value="Login" />
+                                <input disabled={false} className="btn btn-ghost bg-blue-500" type="submit" value="Login" />
                             </div>
                         </form>
                         <p className='text-center'><small>New Here ?<Link to="/signup"> Create an Account</Link></small></p>

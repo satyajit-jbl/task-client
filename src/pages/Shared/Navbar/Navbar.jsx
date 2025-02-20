@@ -7,13 +7,13 @@ import { AuthContext } from "../../../provider/AuthProvider";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const {user, logOut} =useContext(AuthContext);
+  const { user, logOut } = useContext(AuthContext);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const handleLogout = ()=>{
+  const handleLogout = () => {
     logOut()
     // .then(()=>alert('successfully logout'))
   }
@@ -25,31 +25,29 @@ const Navbar = () => {
           {/* Logo */}
           <div className=" flex flex-shrink-0 items-center">
             <img src={logo} alt="" />
-            <Link to="/" className="text-xl font-bold text-blue-600">
-            TaskTrek
-            </Link>
+            <Link
+  to="/"
+  className="text-2xl font-bold bg-gradient-to-r from-blue-600 via-purple-500 to-cyan-400 bg-clip-text text-transparent hover:from-blue-500 hover:via-purple-400 hover:to-cyan-300 transition duration-300"
+>
+  TaskTrek
+</Link>
           </div>
 
           {/* Links */}
           <div className="hidden md:flex space-x-6 items-center">
-            <Link to="/" className="text-gray-600 hover:text-blue-600">
+            <Link to="/" className="text-gray-600 font-semibold hover:text-blue-600">
               Home
             </Link>
-            <Link to="/services" className="text-gray-600 hover:text-blue-600">
-              Services
+            <Link to="/services" className="text-gray-600 font-semibold hover:text-blue-600">
+              About
+            </Link>
+            <Link to="/services" className="text-gray-600 font-semibold hover:text-blue-600">
+              Contact
             </Link>
             {/* {isLoggedIn ? ( */}
             {user ? (
               <>
-                <Link to="/add-service" className="text-gray-600 hover:text-blue-600">
-                  Add Service
-                </Link>
-                <Link to="/reviews" className="text-gray-600 hover:text-blue-600">
-                  My Reviews
-                </Link>
-                <Link to="/my-services" className="text-gray-600 hover:text-blue-600">
-                  My Services
-                </Link>
+
                 <div className="flex items-center space-x-4">
                   <img
                     referrerPolicy='no-referrer'
@@ -59,7 +57,7 @@ const Navbar = () => {
                   />
                   <button
                     onClick={handleLogout}
-                    className="text-gray-600 hover:text-blue-600">
+                    className="text-gray-600 font-semibold hover:text-blue-600">
                     Logout
                   </button>
                 </div>
